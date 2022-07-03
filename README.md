@@ -5,14 +5,6 @@ First, make sure that HashLink, CMake and a C/C++ compiler are installed on your
 
 Then the native extension needs to be built with these commands:
 
-```
-cd extension
-mkdir build
-cd build
-
-cmake ..
-cmake --build .
-```
 It builds a the target `hdll` file, and copy it to the root of the project.
 
 Another method is to build it inside Visual Studio Code with `CMake Tools` extension installed, so you don't have to deal with the command line.
