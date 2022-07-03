@@ -1,0 +1,11 @@
+{
+  "name": "hlimgui",
+  "version": "1.0",
+  "license": "Public",
+  "releasenote": "initial release",
+  "contributors": [
+    "haddock7",
+    "austineast",
+    "Ray Loi"
+  ]
+}

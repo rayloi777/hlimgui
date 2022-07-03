@@ -1,0 +1,50 @@
+cmake_minimum_required(VERSION 3.10)
+
+set(CMAKE_OSX_ARCHITECTURES x86_64)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../lib_out)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY /usr/local/lib)
+
+project(hlimgui)
+#---------------
+include_directories(/usr/local/include)
+include_directories(c_src/lib/imgui)
+include_directories(c_src/lib/imgui-node-editor)
+
+file(GLOB SOURCES "c_src/*.cpp")
+file(GLOB IMGUI_SOURCES "c_src/lib/imgui/*.cpp")
+
+# NODE EDITOR
+file(GLOB IMGUI_NODE_EDITOR_c_src_SOURCES "c_src/addons/node_editor/node_editor.cpp")
+file(GLOB IMGUI_NODE_EDITOR_SOURCES "c_src/lib/imgui-node-editor/*.cpp")
+#list(APPEND SOURCES ${IMGUI_NODE_EDITOR_c_src_SOURCES})
+#list(APPEND IMGUI_SOURCES ${IMGUI_NODE_EDITOR_SOURCES})
+
+add_compile_definitions(IMGUI_USER_CONFIG="../../imgui_config.h")
+
+add_library(hlimgui SHARED
+    ${SOURCES}
+    ${IMGUI_SOURCES}
+    ${IMGUI_NODE_EDITOR_c_src_SOURCES}
+    ${IMGUI_NODE_EDITOR_SOURCES}
+)
+
+set_target_properties(
+    hlimgui
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    PREFIX ""
+    OUTPUT_NAME "hlimgui"
+    SUFFIX .hdll
+)
+
+#LIBHL
+target_include_directories(hlimgui PUBLIC /usr/local/include)
+find_library(LIBHL NAMES hl HINTS /usr/local/lib)
+find_library(APPLICATION_SERVICES_FRAMEWORK ApplicationServices REQUIRED)
+target_link_libraries(hlimgui ${LIBHL} ${APPLICATION_SERVICES_FRAMEWORK})
+
+#---------
+install(TARGETS hlimgui)
